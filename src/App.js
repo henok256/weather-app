@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { TiWeatherCloudy } from 'react-icons/ti';
+import axios from "axios";
 import SearchBar from './components/SearchBar';
+const countryList =require('country-list');
+
+
+
 
 const Weather = () => {
   const [weatherData, setWeatherData] = useState(null);
+  const [country, setCountry] =useState('Canada');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const API_KEY="82a3919dcae3aae87c9d5ec0810adcda"
@@ -16,6 +21,8 @@ const Weather = () => {
         `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`
       );
       setWeatherData(response.data);
+      const {sys}=response.data;
+      setCountry(countryList.getName(sys.country));
       setLoading(false);
     } catch (error) {
       setError(error.message);
@@ -40,7 +47,7 @@ const Weather = () => {
       <SearchBar onSearch={searchWeather} />
       <h1>Weather App</h1>
       <TiWeatherCloudy size={36}/> 
-      <h2>City: {weatherData.name}</h2>
+      <h2>City: {weatherData.name}, {country}</h2>
       <p><strong>Temperature: {weatherData.main.temp} &#8451;</strong></p>
       <p><strong>Description: {weatherData.weather[0].description}</strong></p>
     </div>
