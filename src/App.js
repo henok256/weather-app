@@ -4,9 +4,6 @@ import axios from "axios";
 import SearchBar from './components/SearchBar';
 const countryList =require('country-list');
 
-
-
-
 const Weather = () => {
   const [weatherData, setWeatherData] = useState(null);
   const [country, setCountry] =useState('Canada');
@@ -24,8 +21,9 @@ const Weather = () => {
       const {sys}=response.data;
       setCountry(countryList.getName(sys.country));
       setLoading(false);
+      setError(null);
     } catch (error) {
-      setError(error.message);
+      setError("make sure you have the internet connection or you entered the correct spelling of the city");
       setLoading(false);
     }
   };
@@ -38,12 +36,9 @@ const Weather = () => {
     return <div>Loading...</div>;
   }
 
-  if (error) {
-    return <div>{error}</div>;
-  }
-
   return (
     <div className="container">
+      {error && <p>{error}</p>}
       <SearchBar onSearch={searchWeather} />
       <h1>Weather App</h1>
       <TiWeatherCloudy size={36}/> 
